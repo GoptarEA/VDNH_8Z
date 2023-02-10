@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достопримечательности ВДНХ</title>
+    <link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=04fcaae6-825a-469a-86fe-eabc5755edd4&lang=ru_RU" type="text/javascript"></script>
+    <script src="/static/script/script.js" type="text/javascript" defer></script>
+    <script src="/static/script/provider.js" type="text/javascript" defer></script>
+    <script src="/static/script/points.js" type="text/javascript" defer></script>
+    <script src="/static/script/dynamic.js" type="text/javascript" defer></script>
+    <script src="/static/script/time.js" type="text/javascript" defer></script>
+    <script src="/static/script/favorites.js" type="text/javascript" defer></script>
+    <script src="/static/script/history.js" type="text/javascript" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }}; </script>
+</head>
+<body>
+    <div class="menu">
+        <div class="img_container">
+            <a class="school_link" href=""><img class="school_logo" src="/static/media/school_logo.png" alt="логотип школы"></a>
+        </div>
+        <h1 class="school_number">Школа 2098</h1>
+        <div class="menu_point">
+            <p id="static_button" class="menu_point_text">Статические</p>
+            <p id="dynamic_button" class="menu_point_text">Динамические</p>
+            <p id="time_button" class="menu_point_text">По времени</p>
+            <p id="favorites_button" class="menu_point_text">Избранное</p>
+            <p id="history_button" class="menu_point_text">История</p>
+        </div>
+        <div id="search_menu" class="search_menu">
+            <input id="points_search" class="points_search" placeholder="Поиск"> 
+        </div>
+        {% if g.user %}
+            <div class="register_block">
+                <a style="margin: 0; padding: 0;" href="{{ url_for('logout') }}"><div id="logout_btn" class="login_btn"></div></a>
+            </div>
+        {% else %}
+            <div class="register_block">
+                <a href="{{ url_for('login') }}"><div id="login_btn" class="login_btn"></div></a>
+                <a style="margin: 0; padding: 0;" href="{{ url_for('logout') }}"><div id="logout_btn" class="login_btn"></div></a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="slide_container">
+        <div id="static_content" class="main_container">
+            <div class="left_info">
+                <div class="left_info_content">
+                    <h1 class="left_info_title">Интерактивная карта ВДНХ</h1>
+                    <p class="left_info_text">На данной странице вы найдёте 
+                        информацию об интересных местах и маршрутах на 
+                        территории ВДНХ. Сайт выполнен для участия в Московской
+                        предпрофессиональной олимпиаде школьников учащимися
+                        8 класса математической вертикали школы 2098.</p>
+                    <p class="left_info_text" style="font-weight: bold; font-size: 1.1em;">Больше 
+                        возможностей</p>
+                    
+                    <div class="horiz_three_block">
+                        <div id="rests" class="img_text_block">
+                            <img class="img_in_block" src="/static/media/рестораны.jpg" alt="рестораны">
+                        </div>
+                        <div id="museums" class="img_text_block">
+                            <img class="img_in_block" src="/static/media/музеи.jpg" alt="музеи">
+                        </div>
+                        <div id="forschoolers" class="img_text_block">
+                            <img class="img_in_block" src="/static/media/школьникам.jpg" alt="школьникам">
+            
+                        </div>
+                    </div>
+                    <div class="down_btns">
+                        <div id="allPOI" class="all_poi_btn">Все места</div>
+                        <div id="clear_map" class="clear_map"></div>
+                    </div>
+                
+                </div>
+            </div>
+            <div class="map_container">
+                <div id="map"></div>
+            </div>
+            <div class="right_info">
+                <div id="arc" class="picture_block">
+                    <img class="picture_block_img" src="/static/media/арка.jpg" alt="маршрут">
+                </div>
+                <div id="pav1" class="picture_block">
+                    <img class="picture_block_img" src="/static/media/first_pav.jpg" alt="маршрут">
+                </div>
+                <div id="moskvarium" class="picture_block">
+                    <img class="picture_block_img" src="/static/media/москвариум.jpg" alt="маршрут">
+                </div>
+            </div>
+        </div>
+        <div id="dynamic_content" class="main_container" style="display: none;">
+            <div class="left_info">
+                <div class="left_info_content">
+                        <h1 class="left_info_title">Создайте свой маршрут</h1>
+                        <p class="left_info_text" style="margin-top: 1vh;">Введите точки, через которые необходимо
+                            построить маршрут:</p>
+                        <div id="start_container" class="input_container"><input id="point_input_1" class="point_input" placeholder="Откуда"></div>
+                        <div id="transit_point" class="input_container"><input id="point_input_2" class="point_input" placeholder="Промежуточная точка" style="display:none;"></div>
+                        <div id="transit_point" class="input_container"><input id="point_input_3" class="point_input" placeholder="Промежуточная точка" style="display:none;"></div>
+                        <div id="transit_point" class="input_container"><input id="point_input_4" class="point_input" placeholder="Промежуточная точка" style="display:none;"></div>
+                        <div id="finish_container" class="input_container"><input id="point_input_5" class="point_input" placeholder="Куда"></div>
+                        <div class="btn_container">
+                            <button id="add_btn" class="del_add_btn">Добавить</button>
+                            <button id="del_btn" class="del_add_btn">Удалить</button>
+                        </div>
+                        <div class="down_btns" style="margin-top: 2vh;">
+                            <div id="add_on_map" class="all_poi_btn">Построить</div>
+                            <div id="to_favorites" class="clear_map" style="background-image: url('/static/media/favorites.png'); width: 4vw;"></div>
+                        </div>
+                </div>
+            </div>
+            <div class="map_container_dynamic">
+                <div id="map_dynamic"></div>
+            </div>
+        </div>
+        <div id="time_content" class="main_container" style="display: none;">
+            <div class="left_info">
+                <div class="left_info_content">
+                        <h1 class="left_info_title">Если у вас мало времени...</h1>
+                        <p class="left_info_text" style="margin-top: 1vh;">Введите стартовую точку и время,
+                             которым вы располагаете, дальше мы всё сделаем за Вас</p>
+                        <p class="left_info_text" style="font-weight: bold; font-size: 1.1em; margin-top: 3vh;">Стартовая точка</p>
+                        <input id="onepoint_input" class="onepoint_input" type="text" placeholder="Введите точку старта">
+                        <p class="left_info_text" style="font-weight: bold; font-size: 1.1em;  margin-top: 3vh;">Время</p>
+                        
+
+                        <div class="down_btns" style="margin-top: 2vh;">
+                            <input id="time_input" class="time_input" type="time" style="margin-top: 0;">
+                            <div id="search_routes" class="all_poi_btn" style="height: 2vh; margin-left: 2vw;">Подобрать</div>
+                        </div>
+                        
+                </div>
+            </div>
+            <div class="map_container_dynamic">
+                <div id="map_time"></div>
+            </div>
+        </div>
+        <div id="favorites_content" class="main_container" style="display: none; grid-template-columns: 1.5fr 2fr;">
+            {% if favorites %}
+                <div class="left_info" style="padding: 2vh 1vw; position: relative;">
+                    <div class="left_info_content">
+                        <h1 class="left_info_title">Избранные маршруты</h1>
+                        <div id="routes_list_fav" class="routes_list" style="margin: 0 auto; overflow: scroll; height: 60vh;">
+                            {% for elem in favorites %}
+                                <div id="route_info_container_fav" class="route_info" style="position: relative;">
+                                    <div id="route_settings" class="route_settings"></div>
+                                    {% for point in elem %}
+                                        {% if point == elem[0] %}
+                                            <p id="route_info_fav">Старт: {{ point }}</p>
+                                        {% elif point == elem[-1] %}
+                                            <p id="route_info_fav">Финиш: {{ point }}</p>
+                                        {% else %}
+                                            <p id="route_info_fav">Точка маршрута: {{ point }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="central_block" id="central_block" style="padding: 14vh 1vw; position: absolute; left: 42%; display: none; z-index: 3;">
+                    <div id="nothing_fav" class="nothing"><h2 style="width: 100%; height: 100%; font-size: 24px;
+                    line-height: 100%; text-align: center; margin: auto auto;">Нажмите на маршрут, чтобы получить подробную информацию</h2></div>
+                    <div id="aboute_route_fav" class="aboute_route">
+                        <p id="close_aboute_route_fav" class="close_aboute_route">x</p>
+                        <h2 style="text-align: center; margin: 0 auto;">Информация о маршруте</h2>
+                        <img id="map_image_fav" class="map_image" src="" alt="изображение карты">
+                        <div id="start_block_fav" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Старт:</p>
+                            <p id="start_fav" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div id="finish_block_fav" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Финиш:</p>
+                            <p id="finish_fav" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div id="time_block_fav" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Время:</p>
+                            <p id="time_fav" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div id="lenght_block_fav" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Длина:</p>
+                            <p id="length_fav" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div class="down_btns_fav" style="margin-top: 4vh;">
+                            <div id="create_time_route_fav" class="all_poi_btn" style="height: 2vh; margin-left: 2vw;">Построить</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map_container_dynamic">
+                    <div id="map_favorites"></div>
+                </div>
+            {% else %}
+                <h1 style="position: absolute; left: 50%; transform: translateX(-50%); text-align: center;">Вы пока что не
+                    добавили ни одного маршрута в избранное, не надо так (>_<)</h1>
+            {% endif %}
+        </div>
+        <div id="history_content" class="main_container" style="display: none; grid-template-columns: 1.5fr 2fr;">
+            {% if history %}
+                <div class="left_info" style="padding: 2vh 1vw; position: relative;">
+                    <div class="left_info_content">
+                        <h1 class="left_info_title">История маршрутов</h1>
+                        <div id="routes_list_history" class="routes_list" style="margin: 0 auto; overflow: scroll; height: 60vh;">
+                            {% for elem in history %}
+                                <div id="route_info_container_history" class="route_info">
+                                    {% for point in elem %}
+                                        {% if point == elem[0] %}
+                                            <p id="route_info_history">Старт: {{ point }}</p>
+                                        {% elif point == elem[-1] %}
+                                            <p id="route_info_history">Финиш: {{ point }}</p>
+                                        {% else %}
+                                            <p id="route_info_history">Точка маршрута: {{ point }}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="central_block" id="central_block_hist" style="padding: 14vh 1vw; position: absolute; left: 42%; display: none; z-index: 3;">
+                    <div id="nothing_history" class="nothing"><h2 style="width: 100%; height: 100%; font-size: 24px;
+                    line-height: 100%; text-align: center; margin: auto auto;">Нажмите на маршрут, чтобы получить подробную информацию</h2></div>
+                    <div id="aboute_route_history" class="aboute_route">
+                        <p id="close_aboute_route_history" class="close_aboute_route">x</p>
+                        <h2 style="text-align: center; margin: 0 auto;">Информация о маршруте</h2>
+                        <img id="map_image_history" class="map_image" src="" alt="изображение карты">
+                        <div id="start_block_history" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Старт:</p>
+                            <p id="start_history" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div id="finish_block_history" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Финиш:</p>
+                            <p id="finish_history" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div id="time_block_history" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Время:</p>
+                            <p id="time_history" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div id="lenght_block_history" class="info_block">
+                            <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Длина:</p>
+                            <p id="length_history" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                        </div>
+                        <div class="down_btns_history" style="margin-top: 4vh;">
+                            <div id="create_time_route_history" class="all_poi_btn" style="height: 2vh; margin-left: 2vw;">Построить</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="map_container_dynamic">
+                    <div id="map_history"></div>
+                </div>
+            {% else %}
+                <h1 style="position: absolute; left: 50%; transform: translateX(-50%); text-align: center;">Вы пока что не
+                    построили ни одного маршрута, не надо так (>_<). Лучше сходите зарегистрируйтесь...</h1>
+            {% endif %}
+        </div>
+
+    </div>
+    <div id="opened_win" class="opened_win">
+        <div class="opened_win_container">
+            <h1 class="left_info_title" style="margin: 0 auto;">Найденные маршруты</h1>
+            <div class="open_win_container">
+                <div id="routes_list" class="routes_list">
+                    <template id="route_template">
+                        <div id="route_info_container" class="route_info">
+                            <p id="route_info"></p>
+                            <p id="route_info"></p>
+                            <p id="route_info"></p>
+                        </div>
+                    </template>
+                </div>
+                <div id="nothing" class="nothing"><h2 style="width: 100%; height: 100%; font-size: 24px;
+                line-height: 100%; text-align: center; margin: auto auto;">Нажмите на маршрут, чтобы получить подробную информацию</h2></div>
+                <div id="aboute_route" class="aboute_route">
+                    <p id="close_aboute_route" class="close_aboute_route">x</p>
+                    <h2 style="text-align: center; margin: 0 auto;">Информация о маршруте</h2>
+                    <img id="map_image" class="map_image" src="" alt="изображение карты">
+                    <div id="start_block" class="info_block">
+                        <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Старт:</p>
+                        <p id="start" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                    </div>
+                    <div id="finish_block" class="info_block">
+                        <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Финиш:</p>
+                        <p id="finish" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                    </div>
+                    <div id="time_block" class="info_block">
+                        <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Время:</p>
+                        <p id="time" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                    </div>
+                    <div id="lenght_block" class="info_block">
+                        <p class="left_info_text" style="margin: 0 1vw 0 0; font-weight: bold; font-size: 1.1em;">Длина:</p>
+                        <p id="length" class="left_info_text" style="margin: 0 1vw 0 0; font-size: 1.1em;">-</p>
+                    </div>
+                    <div class="down_btns" style="margin-top: 4vh;">
+                        <div id="create_time_route" class="all_poi_btn" style="height: 2vh; margin-left: 2vw;">Построить</div>
+                        <div id="to_favorites_time" class="to_favorites" style="background-image: url('/static/media/favorites.png'); width: 4vw;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="opened_win_settings" class="opened_win_settings">
+            <div id="settings_route_win" class="settings_route_win">
+            </div>
+    </div>
+</body>
+</html>

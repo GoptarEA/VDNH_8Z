@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достопримечательности ВДНХ</title>
+    <link href="{{ url_for('static', filename='css/registration.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=04fcaae6-825a-469a-86fe-eabc5755edd4&lang=ru_RU" type="text/javascript"></script>
+    <!-- <script src="script.js" type="text/javascript" defer></script>
+    <script src="provider.js" type="text/javascript" defer></script>
+    <script src="points.js" type="text/javascript" defer></script>
+    <script src="dynamic.js" type="text/javascript" defer></script>
+    <script src="time.js" type="text/javascript" defer></script> -->
+</head>
+<body>
+    <div class="registration_win">
+        <div class="registration_info">
+            <h2>В Интерактивные Карты ВДНХ можно войти через:</h2>
+            <ul>
+                <li>Почту</li>
+                <li>Номер телефона</li>
+                <li>Логин</li>
+            </ul>
+        </div>
+        <div class="form_win">
+            <h2>Придумайте логин и пароль</h2>
+            <form class="reg_form" method="post">
+                <input type="text" class="login" name="login" placeholder="Телефон или почта">
+                <input type="password" class="login" name="password" placeholder="Пароль">
+                <input type="password" class="login" name="repassword" placeholder="Повтор пароля">
+                <button class="reg_btn" type="submit">Продолжить</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

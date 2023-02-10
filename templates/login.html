@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достопримечательности ВДНХ</title>
+    <link href="{{ url_for('static', filename='css/login.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="registration_win">
+        <h2 style="width: 100%; text-align: center;">Введите логин и пароль или <a href="{{ url_for('registration') }}">зарегистрируйтесь</a></h2>
+        <form class="reg_form" method="post">
+            <input type="text" class="login" name="login" placeholder="Телефон или почта">
+            <input type="password" class="login" name="password" placeholder="Пароль">
+            <button class="reg_btn" type="submit">Продолжить</button>
+        </form>
+    </div>
+</body>
+</html>
