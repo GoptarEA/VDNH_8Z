@@ -100,7 +100,7 @@
                         <h1 class="left_info_title">Создайте свой маршрут</h1>
                         <p class="left_info_text" style="margin-top: 1vh;">Введите точки, через которые необходимо
                             построить маршрут:</p>
-                        <div id="start_container" class="input_container"><input id="point_input_1" class="point_input" placeholder="Откуда"></div>
+                        <div id="start_container" class="input_container"><input id="point_input_1" class="point_input" placeholder="Откуда" value="Павильон №1 Центральный"></div>
                         <div id="transit_point" class="input_container"><input id="point_input_2" class="point_input" placeholder="Промежуточная точка" style="display:none;"></div>
                         <div id="transit_point" class="input_container"><input id="point_input_3" class="point_input" placeholder="Промежуточная точка" style="display:none;"></div>
                         <div id="transit_point" class="input_container"><input id="point_input_4" class="point_input" placeholder="Промежуточная точка" style="display:none;"></div>
@@ -126,7 +126,7 @@
                         <p class="left_info_text" style="margin-top: 1vh;">Введите стартовую точку и время,
                              которым вы располагаете, дальше мы всё сделаем за Вас</p>
                         <p class="left_info_text" style="font-weight: bold; font-size: 1.1em; margin-top: 3vh;">Стартовая точка</p>
-                        <input id="onepoint_input" class="onepoint_input" type="text" placeholder="Введите точку старта">
+                        <input id="onepoint_input" class="onepoint_input" type="text" placeholder="Введите точку старта" value="Павильон №1 Центральный">
                         <p class="left_info_text" style="font-weight: bold; font-size: 1.1em;  margin-top: 3vh;">Время</p>
                         
 
@@ -305,6 +305,12 @@
     </div>
     <div id="opened_win_settings" class="opened_win_settings">
             <div id="settings_route_win" class="settings_route_win">
+                <input id="change_start_point" class="change_start_point" placeholder="Старт" type="text">
+                <input id="change_finish_point" class="change_start_point" placeholder="Финиш" type="text">
+                <div class="two_btns">
+                    <button id="change_btn" class="change_btn">Применить изменения</button>
+                    <button id="delete_btn" class="change_btn">Удалить маршрут</button>
+                </div>
             </div>
     </div>
 </body>

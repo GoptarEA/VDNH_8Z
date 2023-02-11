@@ -147,6 +147,44 @@ def history_dynamic():
         db.session.commit()
     return jsonify(result=" ")
 
+@app.route("/delete_favorite")
+def delete_favorite():
+    pnts = request.args.get('pnts', 0, type=str)
+    favorite_routes = [routes for routes in Routes.query.all()
+                       if pnts == routes.routePoints and routes.type == "favorites"]
+    db.session.delete(favorite_routes[0])
+    db.session.commit()
+    return jsonify(result=" ")
+
+
+@app.route("/change_favorite")
+def change_favorite():
+    pnts = request.args.get('pnts', 0, type=str)
+    newpnts = request.args.get('newpnts', 0, type=str).rstrip().split(",")
+    favorite_routes = [routes for routes in Routes.query.all()
+                       if pnts == routes.routePoints and routes.type == "favorites"]
+    print(newpnts)
+    print(favorite_routes[0].routePoints.split(","))
+    if not newpnts[0]:
+        favorite_routes[0].routePoints = favorite_routes[0].routePoints.split(",")[0] + "," + newpnts[1]
+        db.session.commit()
+        print(favorite_routes[0].routePoints)
+    elif not newpnts[1]:
+        favorite_routes[0].routePoints = newpnts[0] + favorite_routes[0].split(",")[1].routePoints[1]
+        db.session.commit()
+        print(favorite_routes[0].routePoints)
+    else:
+        favorite_routes[0].routePoints = ",".join(newpnts)
+        db.session.commit()
+
+
+
+
+
+    # db.session.delete(favorite_routes[0])
+    # db.session.commit()
+    return jsonify(result=" ")
+
 
 if __name__ == '__main__':
     app.run()

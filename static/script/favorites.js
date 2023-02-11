@@ -76,6 +76,10 @@ function init(){
     ['zoomControl', 'searchControl', 'rulerControl',
     'typeSelector', 'fullscreenControl', 'trafficControl'].forEach(elem => myMap.controls.remove(elem));
 
+    new ymaps.SuggestView(document.getElementById("change_start_point"), {provider: provider, results: 10, offset: [-720, -480]});
+    new ymaps.SuggestView(document.getElementById("change_finish_point"), {provider: provider, results: 10, offset: [-720, -480]});
+
+
 }
 
 document.getElementById("close_aboute_route_fav").addEventListener("click", () => {
@@ -84,8 +88,70 @@ document.getElementById("close_aboute_route_fav").addEventListener("click", () =
     document.getElementById("nothing_fav").style.display = "block";
 });
 
-document.getElementById("route_settings").addEventListener("click", (elem) => {
-    if (elem.target.id === "route_settings") {
-        document.getElementById("opened_win_settings").style.display = "block";
+
+Array.from(document.getElementsByClassName("route_settings")).forEach((elem) => {
+    elem.addEventListener("click", (el) => {
+        if (el.target.id === "route_settings") {
+            document.getElementById("opened_win_settings").style.display = "block";
+            document.getElementById("delete_btn").addEventListener("click", () => {
+                var p1 = elem.parentElement.childNodes[3].innerHTML.split(": ")[1];
+                var p2 = elem.parentElement.childNodes[5].innerHTML.split(": ")[1];
+                $.getJSON($SCRIPT_ROOT + '/delete_favorite', {
+                    pnts: p1 + "," + p2
+                });
+                $(elem.parentElement).remove();
+                document.getElementById("opened_win_settings").style.display = "none";
+                document.getElementById("change_start_point").value = "";
+                document.getElementById("change_finish_point").value = "";
+            });
+            document.getElementById("change_btn").addEventListener("click", () => {
+                var p1 = elem.parentElement.childNodes[3].innerHTML.split(": ")[1];
+                var p2 = elem.parentElement.childNodes[5].innerHTML.split(": ")[1];
+                var new1 = document.getElementById("change_start_point").value;
+                var new2 = document.getElementById("change_finish_point").value;
+                if (new1 + new2 === "") {
+                    alert("Вы не указали точки для изменения")
+                } else if (new1 === "") {
+                    elem.parentElement.childNodes[5].innerHTML = "Финиш: " + new2;
+                    $.getJSON($SCRIPT_ROOT + '/change_favorite', {
+                        pnts: p1 + "," + p2,
+                        newpnts: "," + new2
+                    });
+
+                    document.getElementById("opened_win_settings").style.display = "none";
+                    document.getElementById("change_start_point").value = "";
+                    document.getElementById("change_finish_point").value = "";
+                } else if (new2 === "") {
+                    elem.parentElement.childNodes[3].innerHTML = "Старт: " + new1;
+                    $.getJSON($SCRIPT_ROOT + '/change_favorite', {
+                        pnts: p1 + "," + p2,
+                        newpnts: new1 + ","
+                    });
+
+                    document.getElementById("opened_win_settings").style.display = "none";
+                    document.getElementById("change_start_point").value = "";
+                    document.getElementById("change_finish_point").value = "";
+                } else {
+                    elem.parentElement.childNodes[3].innerHTML = "Старт: " + new1;
+                    elem.parentElement.childNodes[5].innerHTML = "Финиш: " + new2;
+                    $.getJSON($SCRIPT_ROOT + '/change_favorite', {
+                        pnts: p1 + "," + p2,
+                        newpnts: new1 + "," + new2
+                    });
+
+                    document.getElementById("opened_win_settings").style.display = "none";
+                    document.getElementById("change_start_point").value = "";
+                    document.getElementById("change_finish_point").value = "";
+                }
+            });
+        }
+    })
+});
+
+document.getElementById("opened_win_settings").addEventListener("click", (arg) => {
+    if (arg.target.id === "opened_win_settings") {
+        document.getElementById("opened_win_settings").style.display = "none";
+        document.getElementById("change_start_point").value = "";
+        document.getElementById("change_finish_point").value = "";
     }
 });

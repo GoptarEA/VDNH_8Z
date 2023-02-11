@@ -823,11 +823,13 @@ html, body {
 }
 
 .settings_route_win {
+    box-sizing: border-box;
     margin: 50vh auto;
+    padding: 2vh 1vw;
     transform: translateY(-50%);
-    width: 20vw;
-    height: 20vh;
-    background-color: white;
+    width: 25vw;
+    height: 25vh;
+    background-color: rgb(232, 232, 255);
     border-radius: 16px;
 }
 
@@ -841,3 +843,43 @@ html, body {
     background-color: rgba(0, 0, 0, 0.274);
     display: none;
 }
+
+.change_start_point {
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 auto 2vh auto;
+    padding: 1vh 0 1vh 1vw;
+    width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    border: 0;
+    border-radius: 8px;
+}
+
+.two_btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 2vh auto;
+}
+
+.change_btn {
+    box-sizing: border-box;
+    padding: 1vh 1vw;
+    margin: 0 auto;
+    color: white;
+    font-size: 18px;
+    background-color: rgba(0, 0, 0, 0.644);
+    border: 0;
+    width: 10vw;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: ease 0.2s;
+}
+
+.change_btn:hover {
+    background-color: rgba(0, 0, 0, 0.77);
+    transition: ease 0.2s;
+}
+
