@@ -25,9 +25,9 @@ function init(){
         myMap.geoObjects.add(multiRoute);   
     }
     document.getElementById("add_on_map").addEventListener("click", () => {
-        var allpoints = new Array();
+        var allpoints = [];
         Array.from(document.getElementsByClassName("point_input")).forEach(elem => {
-            if (elem.value != "") {
+            if (elem.value !== "") {
                 allpoints.push(Coords.pointCoords([elem.value])[0]);  
             }
             elem.value = "";

@@ -20,7 +20,6 @@ function init(){
     async function addNewRoute(multiRoute, key, start, time) {
         multiRoute.model.events.add('requestsuccess', async () => {
             var activeRouteTime = await multiRoute.getActiveRoute().properties.get("duration").text;
-            // var activeRouteDistance = await multiRoute.getActiveRoute().properties.get("distance").text;
             const div = document.querySelector('div#routes_list');
             const t = document.querySelector("#route_template");
             const p = t.content.querySelectorAll("#route_info");
@@ -136,27 +135,6 @@ document.getElementById("close_aboute_route").addEventListener("click", () => {
     document.getElementById("aboute_route").style.display = "none";
     document.getElementById("nothing").style.display = "block";
 });
-
-
-document.getElementById("to_favorites").addEventListener("click", () => {
-
-});
-
-// $(function() {
-//   $(".menupoints").delegate("a", "click", function () {
-//       var s = "";
-//       for (var i = 0; i < 6; i++) {
-//           if (document.getElementById('pnt' + String(i + 1)) != null) {
-//               s += $(document.getElementById('pnt' + String(i + 1))).val() + ", ";
-//           }
-//       }
-//       console.log(s);
-//       $.getJSON($SCRIPT_ROOT + '/add_to_history', {
-//           arrpoints: s
-//       });
-//       });
-// });
-
 
 $(function() {
     $("#to_favorites_time").bind("click", function () {

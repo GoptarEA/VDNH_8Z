@@ -176,13 +176,6 @@ def change_favorite():
     else:
         favorite_routes[0].routePoints = ",".join(newpnts)
         db.session.commit()
-
-
-
-
-
-    # db.session.delete(favorite_routes[0])
-    # db.session.commit()
     return jsonify(result=" ")
 
 
