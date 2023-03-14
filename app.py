@@ -38,8 +38,6 @@ def before_request():
         g.user = user
 
 
-
-
 @app.route("/api/v1.0/onchange", methods=["POST"])
 def on_change():
     request.files['file'].save("./static/media/profile_pic_folder/" + str(g.user.id) + ".png")
@@ -47,10 +45,10 @@ def on_change():
 
     return jsonify({"status": "Картинка успешно заменена"})
 
+
 @app.route("/lk")
 def lk():
     return render_template("lk.html", login=g.user.login)
-
 
 
 @app.route('/')
@@ -61,7 +59,7 @@ def index():
         history_routes = [rt.routePoints.split(",") for rt in history_routes]
 
         favorite_routes = [routes for routes in Routes.query.all()
-                          if g.user.id == routes.userId and routes.type == "favorites"]
+                           if g.user.id == routes.userId and routes.type == "favorites"]
         favorite_routes = [rt.routePoints.split(",") for rt in favorite_routes]
         print(favorite_routes)
     else:
@@ -81,13 +79,14 @@ def index():
             favorites=favorite_routes
         )
 
+
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == 'POST':
         session.pop('user_id', None)
-        login = request.form.get('login')
+        login_form = request.form.get('login')
         password = request.form.get('password')
-        user = [person for person in Users.query.all() if person.login == login]
+        user = [person for person in Users.query.all() if person.login == login_form]
         if not user:
             return "Пользователя с данным логином не существует"
         elif not check_password_hash(user[0].password, password):
@@ -173,6 +172,7 @@ def history_dynamic():
         db.session.flush()
         db.session.commit()
     return jsonify(result=" ")
+
 
 @app.route("/delete_favorite")
 def delete_favorite():
