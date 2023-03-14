@@ -42,7 +42,7 @@ def before_request():
 
 @app.route("/api/v1.0/onchange", methods=["POST"])
 def on_change():
-    request.files['file'].save("./profile_pic_folder/" + str(g.user.id) + ".png")
+    request.files['file'].save("./static/media/profile_pic_folder/" + str(g.user.id) + ".png")
     print(request.values.to_dict())
 
     return jsonify({"status": "Картинка успешно заменена"})
@@ -67,14 +67,19 @@ def index():
     else:
         history_routes = []
         favorite_routes = []
-    print("/profile_pic_folder/" + str(g.user.id) + ".png")
-    return render_template(
-        "index.html",
-        history=history_routes,
-        favorites=favorite_routes,
-        user_pic="/profile_pic_folder/" + str(g.user.id) + ".png"
-    )
-
+    if session:
+        return render_template(
+            "index.html",
+            history=history_routes,
+            favorites=favorite_routes,
+            user_pic="/static/media/profile_pic_folder/" + str(g.user.id) + ".png"
+        )
+    else:
+        return render_template(
+            "index.html",
+            history=history_routes,
+            favorites=favorite_routes
+        )
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
