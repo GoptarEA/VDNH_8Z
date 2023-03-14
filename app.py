@@ -1,9 +1,10 @@
 from flask import Flask, render_template, session, g, jsonify, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
+CORS(app)
 app.secret_key = '1F7VkTpXpSBo9P6Oskv9Kq$23QwD9FG44U'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db = SQLAlchemy(app)
@@ -35,6 +36,17 @@ def before_request():
     if 'user_id' in session:
         user = [person for person in Users.query.all() if person.id == session['user_id']][0]
         g.user = user
+
+
+
+
+@app.route("/api/v1.0/onchange", methods=["POST"])
+def on_change():
+    request.files['file'].save("./profile_pic_folder/new_pic.png")
+    print(request.args["login"])
+    # g.user
+
+    return jsonify({"status": "Картинка успешно заменена"})
 
 
 @app.route('/')
