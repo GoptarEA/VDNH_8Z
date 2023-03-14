@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Личный кабинет</title>
+  <link href="{{ url_for('static', filename='css/lk.css')}}" rel="stylesheet" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/static/script/lk.js" type="text/javascript" defer></script>
+
+</head>
+
+<body>
+  <h1 class="lk-title">Личный кабинет пользователя</h1>
+  <div class="form-container" id="form-container">
+    <form class="lk-form" id="formElem">
+      <p class="elem-label" style="margin: 0 0 0 10px;">Изменить данные</p>
+      <div class="elem-container">
+        <p class="elem-label">Логин:</p>
+        <input id="login" name="login" class="elem-input" placeholder="{{ login }}">
+      </div>
+      <div class="elem-container">
+        <p class="elem-label">Пароль:</p>
+        <input id="password" name="password" class="elem-input" placeholder="******">
+      </div>
+      <p class="elem-label" style="margin: 40px 0 0 10px;">Сменить изображение профиля</p>
+      <div class="file-container">
+        <input id="pic" type="file" placeholder="">
+      </div>
+
+
+      <button id="change" type="button" class="form-button">Изменить данные</button>
+    </form>
+  </div>
+
+
+</body>
+
+</html>

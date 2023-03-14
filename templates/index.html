@@ -38,6 +38,7 @@
         </div>
         {% if g.user %}
             <div class="register_block">
+                <a style="margin: 0; padding: 0;" href="{{ url_for('lk') }}"><div id="logout_btn" class="login_btn" style="background-image: url({{ user_pic }});"></div></a>
                 <a style="margin: 0; padding: 0;" href="{{ url_for('logout') }}"><div id="logout_btn" class="login_btn"></div></a>
             </div>
         {% else %}
